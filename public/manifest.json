@@ -1,0 +1,21 @@
+{
+  "name": "Loyalty Card App",
+  "short_name": "Loyalty",
+  "description": "Votre carte de fidélité numérique",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#6D28D9",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
