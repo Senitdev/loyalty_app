@@ -12,7 +12,7 @@ export default function MerchantDashboard() {
   const[query,setQuery]=useState("")
    const { client, idClient, loading, error, searchClient } = useSearchClient();
     const MerchantId=3
-   const{transaction,getTransaction}=useTransaction(MerchantId)
+   const{transaction,getTransaction}=useTransaction()
   useEffect(()=>{
     const LoadSolde=async()=>{
       try{
@@ -26,12 +26,12 @@ export default function MerchantDashboard() {
       }catch(err){
        console.log(err)
       }
+     
     }
-    //Historique trqnsaction
-
+    //Historique transaction
+     getTransaction(MerchantId,"","")
     //Appel de la fonction load
     LoadSolde()
-    console.log("Donne transact",transaction)
   },[])
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-black text-white">
@@ -72,22 +72,56 @@ export default function MerchantDashboard() {
                 <thead>
                   <tr className="text-left text-gray-400 border-b border-zinc-800">
                     <th className="py-2">Date</th>
-                    <th className="py-2">Transaction</th>
-                    <th className="py-2"></th>
+                    <th className="py-2">Type</th>
+                    <th className="py-2">Points</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {/* 
-                {
-                  transaction.map((t,i)=>(
-                    <tr key={i} className="border-b border-zinc-800">
-                      <td className="py-2 text-gray-300">{t.date}</td>
-                      <td>{t.type}</td>
-                    </tr>
-                  ))
-                } */}
+              {transaction && transaction.length > 0 ? (
+              transaction.map((tx) => (
+                <tr
+                  key={tx.id}
+                  className="border-b border-zinc-800 hover:bg-zinc-800/50 transition"
+                >
+                  <td className="py-2 px-3 text-gray-300">
+                    {new Date(tx.created_at).toLocaleDateString("fr-FR", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </td>
+                  <td
+                    className={`py-2 px-3 font-medium ${
+                      tx.type === "earn"
+                        ? "text-green-400"
+                        : tx.type === "spens"
+                        ? "text-red-400"
+                        : "text-gray-300"
+                    }`}
+                  >
+                    {tx.type === "earn" ? "earn (+)" : "spens (-)"}
+                  </td>
+                  <td className="py-2 px-3">{tx.points}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={3} className="py-4 text-center text-gray-400">
+                  Aucune transaction trouvée
+                </td>
+              </tr>
+            )}
+          
                 </tbody>
               </table>
+               <Link
+              href="/merchant/transactions"
+              className="text-blue-400 text-sm font-medium mt-3 inline-block hover:underline"
+            >
+              View Details
+            </Link>
             </div>
           </section>
 

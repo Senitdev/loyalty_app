@@ -91,9 +91,8 @@ export default function ManageClientPoints() {
   // ➕ Octroyer des points
   const handleAddPoints = async () => {
     if (!idClient || points <= 0) return;
-
     try {
-      const res = await fetch(`http://localhost:9090/api/v1/loyaltycard/${points}`, {
+      const res = await fetch(`http://localhost:9090/api/v1/loyaltycard/add/${points}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
