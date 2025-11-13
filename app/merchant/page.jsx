@@ -6,11 +6,13 @@ import { Search, PlusCircle, MinusCircle } from "lucide-react";
 import Link from "next/link";
 import useSearchClient from "@/app/hooks/useSearchClient";
 import useTransaction from "@/app/hooks/useTransaction";
+import useGetClient from "../hooks/useGetClient";
 export default function MerchantDashboard() {
   const [menuOpen, setMenuOpen] = useState(false);
   const[soldePoint,setSoldePoins]=useState(0)
   const[query,setQuery]=useState("")
    const { client, idClient, loading, error, searchClient } = useSearchClient();
+   const{clients,HandleGetClientByMerchant}=useGetClient()
     const MerchantId=3
    const{transaction,getTransaction}=useTransaction()
   useEffect(()=>{
@@ -31,6 +33,8 @@ export default function MerchantDashboard() {
     //Historique transaction
      getTransaction(MerchantId,"","")
     //Appel de la fonction load
+    //liste des 5 derniers clients
+    HandleGetClientByMerchant(MerchantId)
     LoadSolde()
   },[])
   return (
@@ -127,7 +131,7 @@ export default function MerchantDashboard() {
 
           {/* Section droite : Liste des clients */}
           <section>
-            <h2 className="text-xl font-semibold mb-4">Clients</h2>
+            <h2 className="text-xl font-semibold mb-4">Recent clients</h2>
 
             <div className="bg-zinc-900 rounded-xl shadow p-4 border border-zinc-800">
               <div className="flex gap-2 mb-3">
@@ -152,27 +156,30 @@ export default function MerchantDashboard() {
                 <thead>
                   <tr className="text-left text-gray-400 border-b border-zinc-800">
                     <th className="py-2">Name</th>
+                    <th className="py-2">Mobile</th>
                     <th className="py-2">Points</th>
-                    <th className="py-2">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {[
-                    { name: "Alice Johnson", points: 120 },
-                    { name: "Bob Smith", points: 60 },
-                    { name: "Carol Lee", points: 200 },
-                    { name: "David Brown", points: 80 },
-                  ].map((c, i) => (
-                    <tr key={i} className="border-b border-zinc-800">
-                      <td className="py-2">{c.name}</td>
-                      <td className="py-2 text-gray-300">{c.points}</td>
-                      <td className="py-2">
-                        <button className="text-blue-400 hover:text-blue-300">
-                          Adjust
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                {clients && clients.length>0 ?(
+                  clients.map((cls)=>(
+                <tr
+                  key={cls.id}
+                  className="border-b border-zinc-800 hover:bg-zinc-800/50 transition"
+                >
+                <td className="py-2 px-3 text-gray-300">{cls.name}</td>
+                <td className="py-2 px-3 text-gray-300">{cls.mobile}</td>
+                <td className="py-2 px-3 text-gray-300">{cls.soldepoints}</td>
+                </tr>
+                  ))
+                ):(
+                   <tr>
+                <td colSpan={3} className="py-4 text-center text-gray-400">
+                  Aucune clients inscrits
+                </td>
+              </tr>
+
+                )}
                 </tbody>
               </table>
                {error && <p className="text-red-400 mt-2">{error}</p>}
