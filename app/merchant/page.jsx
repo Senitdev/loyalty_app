@@ -21,7 +21,10 @@ export default function MerchantDashboard() {
       try{
       const res=await fetch(`${API_BASE_URL}/loyaltycard/merchant/solde/${MerchantId}`,{
         method:"GET",
-           headers: { "Content-Type": "application/json" },
+           headers: { 
+             "Content-Type": "application/json",
+             "Authorization": `Bearer ${localStorage.getItem("token")}`
+           }
       })
       const data=await res.json()
         if (!res.ok) throw new Error("Erreur fetch");

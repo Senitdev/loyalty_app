@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
-
+import API_BASE_URL from "../../../../url_api/api";
 export default function EditRewardPage() {
   const router = useRouter();
   const params = useParams();
@@ -22,10 +22,15 @@ export default function EditRewardPage() {
   // 🧭 Charger les données du backend
   useEffect(() => {
     if (!id) return;
-
     async function fetchReward() {
       try {
-        const res = await fetch(`http://127.0.0.1:9090/api/v1/reward/${id}`);
+        const res = await fetch(`${API_BASE_URL}/reward/${id}`,{
+          method: "GET",
+          headers: { 
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("token")}`
+          }
+        });
         if (!res.ok) throw new Error("Erreur lors du chargement de la récompense");
         const data = await res.json();
 
@@ -41,9 +46,8 @@ export default function EditRewardPage() {
         setLoading(false);
       }
     }
-
-    fetchReward();
-  }, [id]);
+    fetchReward(); 
+   }, [id]);
 
   // ✍️ Gérer les modifications des champs
 const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -65,9 +69,12 @@ const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElemen
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch(`http://127.0.0.1:9090/api/v1/reward/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/reward/${id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
+        },
         body: JSON.stringify({
           ...formData,
           points_required: parseInt(formData.points_required),

@@ -15,12 +15,12 @@ try{
     const res=await fetch(`${API_BASE_URL}/loyaltycard/user/${idMerchant}`,{
         method:"GET",
         headers:{
-            "Content-Type":"application/json"
+            "Content-Type":"application/json",
+            "Authorization": `Bearer ${localStorage.getItem("token")}`            
         }
     });
       const data=await res.json();
       setClient(data);
-      console.log("data from",data)
 
 } catch (err: any) {
       setError(err.message || "Erreur inconnue");

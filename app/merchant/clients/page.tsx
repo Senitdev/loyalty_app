@@ -41,7 +41,13 @@ export default function ManageClientPoints() {
     });
 
     try {
-      const res = await fetch(`${API_BASE_URL}/clients/search?query=${query}`);
+      const res = await fetch(`${API_BASE_URL}/clients/search?query=${query}`,{
+        method: "GET",
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
+        },
+      });
       if (!res.ok) throw new Error("Client introuvable");
 
       const data = await res.json();
@@ -73,7 +79,9 @@ export default function ManageClientPoints() {
     try {
       const request = await fetch(`${API_BASE_URL}/loyaltycard/solde`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" ,
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
+        },
         body: JSON.stringify(body),
       });
 

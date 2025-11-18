@@ -37,7 +37,9 @@ const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElemen
     try {
       const res = await fetch(`${API_BASE_URL}/reward`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" ,
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
+      },
         body: JSON.stringify(formData),
       });
 
