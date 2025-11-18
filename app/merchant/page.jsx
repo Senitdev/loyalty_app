@@ -7,6 +7,7 @@ import Link from "next/link";
 import useSearchClient from "@/app/hooks/useSearchClient";
 import useTransaction from "@/app/hooks/useTransaction";
 import useGetClient from "../hooks/useGetClient";
+import API_BASE_URL from "../url_api/api";
 export default function MerchantDashboard() {
   const [menuOpen, setMenuOpen] = useState(false);
   const[soldePoint,setSoldePoins]=useState(0)
@@ -18,7 +19,7 @@ export default function MerchantDashboard() {
   useEffect(()=>{
     const LoadSolde=async()=>{
       try{
-      const res=await fetch(`http://localhost:9090/api/v1/loyaltycard/merchant/solde/${MerchantId}`,{
+      const res=await fetch(`${API_BASE_URL}/loyaltycard/merchant/solde/${MerchantId}`,{
         method:"GET",
            headers: { "Content-Type": "application/json" },
       })

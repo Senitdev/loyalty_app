@@ -2,12 +2,17 @@
 import { useEffect, useState } from "react"
 import Link from "next/link";
 import useSoldeClient from "../hooks/useSoldeClient";
+import useGetTransactionClient from "../hooks/useGetTransactionClient";
 export default function Client(){
 const{soldePointsClient,HandleGetSoldeClient}=useSoldeClient()
-const[transaction,setTransaction]=useState("")
+const{transactionClient,getTransactionClient}=useGetTransactionClient()
+const clientId=3
+const startDate="20250101"
+const endDate="20250101"
 useEffect(()=>{
   //Obtenir le solde point des clients pour toutes les magazins dont il a une compte
 HandleGetSoldeClient()
+getTransactionClient(clientId,startDate,endDate)
 },[])
 return(
 <div className="flex flex-col md:flex-row min-h-screen bg-black text-white">    
@@ -47,13 +52,14 @@ return(
                 <thead>
                   <tr className="text-left text-gray-400 border-b border-zinc-800">
                     <th className="py-2">Date</th>
+                    <th className="py-2">Merchant</th>
                     <th className="py-2">Type</th>
                     <th className="py-2">Points</th>
                   </tr>
                 </thead>
                 <tbody>
-              {transaction && transaction.length > 0 ? (
-              transaction.map((tx) => (
+              {transactionClient && transactionClient.length > 0 ? (
+              transactionClient.map((tx) => (
                 <tr
                   key={tx.id}
                   className="border-b border-zinc-800 hover:bg-zinc-800/50 transition"
@@ -75,9 +81,9 @@ return(
                         ? "text-red-400"
                         : "text-gray-300"
                     }`}
-                  >
-                    {tx.type === "earn" ? "earn (+)" : "spens (-)"}
-                  </td>
+                  >{tx.merchant}
+                    </td>
+                    <td className="py-2 px-3" >{tx.type}</td>
                   <td className="py-2 px-3">{tx.points}</td>
                 </tr>
               ))
@@ -90,12 +96,16 @@ return(
             )}
                 </tbody>
               </table>
-               <Link
+              {transactionClient && transactionClient.length>0?(
+                   <Link
               href="/dashboarclient/transactions"
               className="text-blue-400 text-sm font-medium mt-3 inline-block hover:underline"
             >
               View Details
             </Link>
+
+              ):(<></>)}
+            
             </div>
           </section>
     </div>

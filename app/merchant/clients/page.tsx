@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Search, PlusCircle, MinusCircle } from "lucide-react";
-
+import API_BASE_URL from "@/app/url_api/api";
 export default function ManageClientPoints() {
   const [query, setQuery] = useState("");
   const [client, setClient] = useState({
@@ -41,7 +41,7 @@ export default function ManageClientPoints() {
     });
 
     try {
-      const res = await fetch(`http://localhost:9090/api/v1/clients/search?query=${query}`);
+      const res = await fetch(`${API_BASE_URL}/clients/search?query=${query}`);
       if (!res.ok) throw new Error("Client introuvable");
 
       const data = await res.json();
@@ -71,7 +71,7 @@ export default function ManageClientPoints() {
   const HandleCheckSolde = async (body: { merchant_id: number; clients_id: number }) => {
     setPoints(0);
     try {
-      const request = await fetch(`http://localhost:9090/api/v1/loyaltycard/solde`, {
+      const request = await fetch(`${API_BASE_URL}/loyaltycard/solde`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -92,7 +92,7 @@ export default function ManageClientPoints() {
   const handleAddPoints = async () => {
     if (!idClient || points <= 0) return;
     try {
-      const res = await fetch(`http://localhost:9090/api/v1/loyaltycard/add/${points}`, {
+      const res = await fetch(`${API_BASE_URL}/loyaltycard/add/${points}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -116,7 +116,7 @@ export default function ManageClientPoints() {
     } 
 
     try {
-      const res = await fetch(`http://localhost:9090/api/v1/loyaltycard/retrait/${points}`, {
+      const res = await fetch(`${API_BASE_URL}/loyaltycard/retrait/${points}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

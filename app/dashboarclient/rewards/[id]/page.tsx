@@ -1,29 +1,22 @@
 "use client";
-
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { Pencil } from "lucide-react"; // ✏️ Icône d’édition
+import API_BASE_URL from "@/app/url_api/api";
 import useGetRewardByMerchant  from "@/app/hooks/useGetRewardByMerchant";
-export default function ListeReward() {
-  const router = useRouter();
- const { rewards, loading, error, handleGetRewardByMerchant } = useGetRewardByMerchant();
-  const merchantId = 1; // Remplace par l’ID réel du merchant connecté
- useEffect(() => {
-    handleGetRewardByMerchant(merchantId)
-  }, [merchantId]);
+export default function DetailsReward(){
+const{ rewards, loading, error, handleGetRewardByMerchant } = useGetRewardByMerchant();
+ const router = useRouter();
+  const params = useParams();
+    const id = params?.id;
+    useEffect(() => {
 
-  if (loading)
-    return <p className="text-gray-400 text-center mt-10">Chargement des récompenses...</p>;
-  if (error)
-    return <p className="text-red-500 text-center mt-10">Erreur : {error}</p>;
-
-  // 🧭 Fonction de redirection vers la page de modification
-  const handleEdit = (id: number) => {
-    router.push(`/merchant/rewards/edit/${id}`); // à adapter selon ta route d'édition
-  };
-  return (
+    if (id) {
+      handleGetRewardByMerchant(Number(id));
+    }
+  }, [id]);
+    return(
     <div className="min-h-screen bg-zinc-950 text-white px-4 py-6 sm:px-6">
-      <h2 className="text-2xl font-bold mb-6 text-center">🎁 Mes Récompenses</h2>
+      <h2 className="text-2xl font-bold mb-6 text-center">🎁 Les Récompenses du merchant </h2>
 
       {/* ✅ Vue mobile-first : cartes empilées */}
       <div className="grid gap-4 sm:hidden">
@@ -41,13 +34,6 @@ export default function ListeReward() {
                   readOnly
                   className="w-4 h-4 accent-indigo-500"
                 />
-                {/* Bouton crayon */}
-                <button
-                  onClick={() => handleEdit(reward.id)}
-                  className="p-1 rounded hover:bg-zinc-800 transition"
-                >
-                  <Pencil size={16} className="text-indigo-400" />
-                </button>
               </div>
             </div>
             <p className="text-sm text-gray-400 mb-3">{reward.description}</p>
@@ -77,9 +63,7 @@ export default function ListeReward() {
               <th className="px-4 py-2 text-left">Titre</th>
               <th className="px-4 py-2 text-left">Description</th>
               <th className="px-4 py-2 text-left">Points</th>
-              <th className="px-4 py-2 text-left">Actif</th>
               <th className="px-4 py-2 text-left">Créé le</th>
-              <th className="px-4 py-2 text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -92,14 +76,6 @@ export default function ListeReward() {
                 <td className="px-4 py-2 font-medium">{reward.title}</td>
                 <td className="px-4 py-2">{reward.description}</td>
                 <td className="px-4 py-2">{reward.points_required}</td>
-                <td className="px-4 py-2 text-center">
-                  <input
-                    type="checkbox"
-                    checked={reward.isactive}
-                    readOnly
-                    className="w-4 h-4 accent-indigo-500"
-                  />
-                </td>
                 <td className="px-4 py-2">
                   {new Date(reward.created_at).toLocaleDateString("fr-FR", {
                     year: "numeric",
@@ -108,14 +84,6 @@ export default function ListeReward() {
                     hour: "2-digit",
                     minute: "2-digit",
                   })}
-                </td>
-                <td className="px-4 py-2 text-center">
-                  <button
-                    onClick={() => handleEdit(reward.id)}
-                    className="p-2 rounded hover:bg-zinc-800 transition"
-                  >
-                    <Pencil size={18} className="text-indigo-400" />
-                  </button>
                 </td>
               </tr>
             ))}

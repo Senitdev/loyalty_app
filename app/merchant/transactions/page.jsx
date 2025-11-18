@@ -60,9 +60,9 @@ const formattedDate = today.toISOString().split("T")[0];
           </thead>
           <tbody>
             {transaction && transaction.length > 0 ? (
-              transaction.map((tx) => (
+              transaction.map((tx,id) => (
                 <tr
-                  key={tx.id}
+                  key={id}
                   className="border-b border-zinc-800 hover:bg-zinc-800/50 transition"
                 >
                   <td className="py-2 px-3 text-gray-300">

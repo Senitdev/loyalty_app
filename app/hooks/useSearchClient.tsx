@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import API_BASE_URL from "../url_api/api";
 /**
  * Hook pour rechercher un client par email ou téléphone
  * @returns { client, idClient, loading, error, searchClient }
@@ -36,7 +36,13 @@ export default function useSearchClient() {
     });
 
     try {
-      const res = await fetch(`http://localhost:9090/api/v1/clients/search?query=${query}`);
+      const res = await fetch(`${API_BASE_URL}/clients/search?query=${query}`,{
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
+        }
+    });
       if (!res.ok) throw new Error("Client introuvable");
 
       const data = await res.json();

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react"; // 👁️ icônes
-
+import API_BASE_URL from "./url_api/api";
 export default function Home() {
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -27,7 +27,7 @@ export default function Home() {
     setError(null);
 
     try {
-      const res = await fetch("http://127.0.0.1:9090/api/v1/auth/login", {
+      const res = await fetch(`${API_BASE_URL}/auth`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -36,8 +36,9 @@ export default function Home() {
       if (!res.ok) throw new Error("Identifiants invalides");
 
       const data = await res.json();
-      localStorage.setItem("token", data.token);
-
+      localStorage.setItem("token", data.access_token);
+      localStorage.setItem("email", formData.email);
+      console.log("Connexion réussie", data.access_token);
       router.push("/merchant/rewards");
     } catch (err: any) {
       setError(err.message);
