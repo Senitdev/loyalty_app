@@ -3,8 +3,7 @@ import { useEffect, useState } from "react";
 import useGetTransactionClient from "../../hooks/useGetTransactionClient";
 import useAuthGuard from "@/app/hooks/useAuthGuard";
 export default function ClientTransaction(){
-  const authorized = useAuthGuard("client");
-    if (!authorized) return null;
+  ;
       const{transactionClient,getTransactionClient}=useGetTransactionClient()
       const today = new Date();
       const formattedDate = today.toISOString().split("T")[0];
@@ -25,6 +24,8 @@ export default function ClientTransaction(){
   useEffect(()=>{
     getTransactionClient(cliendID,startDate,endDate)
   },[setStartDate,endDate])
+  const authorized = useAuthGuard("client");
+  if (!authorized) return null
     return (
     <div className="p-4">
       <h3 className="text-lg font-semibold mt-6 mb-2">

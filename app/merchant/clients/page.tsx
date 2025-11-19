@@ -5,8 +5,7 @@ import { Search, PlusCircle, MinusCircle } from "lucide-react";
 import API_BASE_URL from "@/app/url_api/api";
 import useAuthGuard from "@/app/hooks/useAuthGuard";
 export default function ManageClientPoints() {
-  const authorized = useAuthGuard("merchant");
-  if (!authorized) return null;
+
   const [query, setQuery] = useState("");
   const [client, setClient] = useState({
     id: "",
@@ -21,7 +20,8 @@ export default function ManageClientPoints() {
   const [loading, setLoading] = useState(false);
   const [idClient, setIdClient] = useState<number>(0);
   const [soldePoints, setSoldePoints] = useState<number>(0);
-
+  const authorized = useAuthGuard("merchant");
+  if (!authorized) return null;
   const [formData, setFormData] = useState({
     merchant_id: 3, // ton marchand actuel
     clients_id: 0,

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import  API_BASE_URL from "../../url_api/api";
+import useAuthGuard from "@/app/hooks/useAuthGuard";
 export default function NewRewardPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -13,6 +14,8 @@ export default function NewRewardPage() {
     merchant_id:1,
     isactive: true,
   });
+    const authorized = useAuthGuard("merchant");
+  if (!authorized) return null;
 const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
   const target = e.target;
   const name = target.name;

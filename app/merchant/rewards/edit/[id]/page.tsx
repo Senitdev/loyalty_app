@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import API_BASE_URL from "../../../../url_api/api";
+import useAuthGuard from "@/app/hooks/useAuthGuard";
 export default function EditRewardPage() {
   const router = useRouter();
   const params = useParams();
@@ -31,6 +32,8 @@ export default function EditRewardPage() {
             "Authorization": `Bearer ${localStorage.getItem("token")}`
           }
         });
+          const authorized = useAuthGuard("merchant");
+          if (!authorized) return null;
         if (!res.ok) throw new Error("Erreur lors du chargement de la récompense");
         const data = await res.json();
 

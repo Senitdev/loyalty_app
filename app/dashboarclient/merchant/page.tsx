@@ -4,15 +4,15 @@ import { useEffect } from "react";
 import useGetAllMerchant from "@/app/hooks/useGetAllMerchant";
 import useAuthGuard from "@/app/hooks/useAuthGuard";
 export default function ClientMerchants() {
-  //On protege la route
-  const authorized = useAuthGuard("client");
-if (!authorized) return null;
+
   const { merchants, handleGetMerchants, loading, error } = useGetAllMerchant();
 
   useEffect(() => {
     handleGetMerchants();
   }, [handleGetMerchants]);
-
+  //On protege la route
+  const authorized = useAuthGuard("client");
+  if (!authorized) return null;
   if (loading) {
     return (
       <div className="flex justify-center items-center py-10 text-gray-400">
