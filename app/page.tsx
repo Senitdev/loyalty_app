@@ -38,8 +38,10 @@ export default function Home() {
       const data = await res.json();
       localStorage.setItem("token", data.access_token);
       localStorage.setItem("email", formData.email);
+      localStorage.setItem("role", data.role);
       console.log("Connexion réussie", data.access_token);
-      router.push("/merchant/rewards");
+      if (data.role === "client") router.push("/dashboarclient");
+      else if (data.role === "merchant") router.push("/merchant"); 
     } catch (err: any) {
       setError(err.message);
     } finally {

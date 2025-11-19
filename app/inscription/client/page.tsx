@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import API_BASE_URL from "@/app/url_api/api";
 export default function SignupPage() {
   const router = useRouter();
   const[message,setMessage]=useState("")
@@ -38,7 +39,7 @@ export default function SignupPage() {
       return
     }
     try {
-      const res = await fetch("http://localhost:9090/api/v1/clients", {
+      const res = await fetch(`${API_BASE_URL}/api/v1/inscription/client`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -47,7 +48,7 @@ export default function SignupPage() {
       if (!res.ok) throw new Error("Erreur lors de l'inscription");
 
       alert("Compte créé avec succès !");
-      router.push("/login");
+      router.push("/");
     } catch (err) {
       alert("Erreur : " + err);
     }

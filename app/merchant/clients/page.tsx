@@ -3,7 +3,10 @@
 import { useEffect, useState } from "react";
 import { Search, PlusCircle, MinusCircle } from "lucide-react";
 import API_BASE_URL from "@/app/url_api/api";
+import useAuthGuard from "@/app/hooks/useAuthGuard";
 export default function ManageClientPoints() {
+  const authorized = useAuthGuard("merchant");
+  if (!authorized) return null;
   const [query, setQuery] = useState("");
   const [client, setClient] = useState({
     id: "",

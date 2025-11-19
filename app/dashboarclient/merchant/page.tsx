@@ -2,8 +2,11 @@
 
 import { useEffect } from "react";
 import useGetAllMerchant from "@/app/hooks/useGetAllMerchant";
-
+import useAuthGuard from "@/app/hooks/useAuthGuard";
 export default function ClientMerchants() {
+  //On protege la route
+  const authorized = useAuthGuard("client");
+if (!authorized) return null;
   const { merchants, handleGetMerchants, loading, error } = useGetAllMerchant();
 
   useEffect(() => {

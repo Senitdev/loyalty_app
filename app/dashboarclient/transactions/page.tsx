@@ -1,7 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
 import useGetTransactionClient from "../../hooks/useGetTransactionClient";
+import useAuthGuard from "@/app/hooks/useAuthGuard";
 export default function ClientTransaction(){
+  const authorized = useAuthGuard("client");
+    if (!authorized) return null;
       const{transactionClient,getTransactionClient}=useGetTransactionClient()
       const today = new Date();
       const formattedDate = today.toISOString().split("T")[0];

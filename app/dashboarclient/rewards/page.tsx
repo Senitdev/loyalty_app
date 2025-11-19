@@ -1,8 +1,12 @@
 "use client";
 import useGetAllMerchant from "@/app/hooks/useGetAllMerchant";
+import useAuthGuard from "@/app/hooks/useAuthGuard";
 import Link from "next/link";
 import { useEffect } from "react";
 export default function ClientRewards(){
+  //On protege la route
+    const authorized = useAuthGuard("client");
+    if (!authorized) return null;
     const { merchants, handleGetMerchants, loading, error } = useGetAllMerchant();
      useEffect(() => {
         handleGetMerchants();

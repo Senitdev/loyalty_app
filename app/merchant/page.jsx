@@ -8,7 +8,10 @@ import useSearchClient from "@/app/hooks/useSearchClient";
 import useTransaction from "@/app/hooks/useTransaction";
 import useGetClient from "../hooks/useGetClient";
 import API_BASE_URL from "../url_api/api";
+import useAuthGuard from "../hooks/useAuthGuard";
 export default function MerchantDashboard() {
+  const authorized = useAuthGuard("merchant");
+  if (!authorized) return null;
   const [menuOpen, setMenuOpen] = useState(false);
   const[soldePoint,setSoldePoins]=useState(0)
   const[query,setQuery]=useState("")

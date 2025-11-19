@@ -2,7 +2,11 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
+import useAuthGuard from "../hooks/useAuthGuard";
 export default function MerchantLayout({ children }: { children: React.ReactNode }) {
+  //on protege le layout
+  const authorized = useAuthGuard("client");
+if (!authorized) return null;
   const [menuOpen, setMenuOpen] = useState(false);
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-black text-white">

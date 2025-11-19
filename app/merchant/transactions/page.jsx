@@ -1,7 +1,10 @@
 'use client';
 import { useState } from "react";
-  import useTransaction from "@/app/hooks/useTransaction";
+import useTransaction from "@/app/hooks/useTransaction";
+import useAuthGuard from "@app/hooks/useAuthGuard"
 export default function TransactionsPage({ merchantId }) {
+  const authorized = useAuthGuard("merchant");
+  if (!authorized) return null;
   const today = new Date();
 const formattedDate = today.toISOString().split("T")[0];
   const [startDate, setStartDate] = useState(formattedDate);

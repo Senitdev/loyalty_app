@@ -3,7 +3,10 @@ import { useEffect, useState } from "react"
 import Link from "next/link";
 import useSoldeClient from "../hooks/useSoldeClient";
 import useGetTransactionClient from "../hooks/useGetTransactionClient";
+import useAuthGuard from "../hooks/useAuthGuard";
 export default function Client(){
+const authorized = useAuthGuard("client");
+if (!authorized) return null;
 const{soldePointsClient,HandleGetSoldeClient}=useSoldeClient()
 const{transactionClient,getTransactionClient}=useGetTransactionClient()
 const clientId=3
@@ -14,6 +17,8 @@ useEffect(()=>{
 HandleGetSoldeClient()
 getTransactionClient(clientId,startDate,endDate)
 },[])
+
+
 return(
 <div className="flex flex-col md:flex-row min-h-screen bg-black text-white">    
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

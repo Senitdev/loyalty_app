@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import API_BASE_URL from "@/app/url_api/api";
 export default function SignupMerchant() {
   const router = useRouter();
   const[message,setMessage]=useState("")
@@ -32,16 +33,16 @@ export default function SignupMerchant() {
       return
     }
     try {
-      const res = await fetch("http://localhost:9090/api/v1/merchant", {
+      const res = await fetch(`${API_BASE_URL}/inscription/merchant`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
       if (!res.ok) throw new Error("Erreur lors de l'inscription");
-
+      console.log(formData);
       alert("Compte créé avec succès !");
-      router.push("/login");
+      router.push("/");
     } catch (err) {
       alert("Erreur : " + err);
     }
