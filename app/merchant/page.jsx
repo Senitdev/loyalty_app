@@ -10,8 +10,7 @@ import useGetClient from "../hooks/useGetClient";
 import API_BASE_URL from "../url_api/api";
 import useAuthGuard from "../hooks/useAuthGuard";
 export default function MerchantDashboard() {
-  const authorized = useAuthGuard("merchant");
-  if (!authorized) return null;
+ 
   const [menuOpen, setMenuOpen] = useState(false);
   const[soldePoint,setSoldePoins]=useState(0)
   const[query,setQuery]=useState("")
@@ -44,6 +43,8 @@ export default function MerchantDashboard() {
     HandleGetClientByMerchant(MerchantId)
     LoadSolde()
   },[])
+   const authorized = useAuthGuard("merchant");
+  if (!authorized) return null;
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-black text-white">
     

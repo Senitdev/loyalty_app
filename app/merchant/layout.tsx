@@ -4,9 +4,10 @@ import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import useAuthGuard from "../hooks/useAuthGuard";
 export default function MerchantLayout({ children }: { children: React.ReactNode }) {
+
+  const [menuOpen, setMenuOpen] = useState(false);
   const authorized = useAuthGuard("merchant");
   if (!authorized) return null;
-  const [menuOpen, setMenuOpen] = useState(false);
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-black text-white">
       {/* Sidebar */}
