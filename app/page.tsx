@@ -27,6 +27,7 @@ export default function Home() {
     setError(null);
 
     try {
+      console.log("info connexion",formData)
       const res = await fetch(`${API_BASE_URL}/auth`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -34,12 +35,23 @@ export default function Home() {
       });
 
       if (!res.ok) throw new Error("Identifiants invalides");
-
-      const data = await res.json();
-      localStorage.setItem("token", data.access_token);
+       const data = await res.json();
+       //on sauve dans le localStorage les donnees
+       localStorage.setItem("token", data.access_token);
       localStorage.setItem("email", formData.email);
       localStorage.setItem("role", data.role);
-      console.log("Connexion réussie", data.access_token);
+      //On lance une second requete avec le email pour recuperer le ID
+      const response = await fetch(`${API_BASE_URL}/user/search?query=${formData.email}`,{
+        method:"GET",
+        headers:{
+          "Content-Type":"Application/json",
+           "Authorization": `Bearer ${localStorage.getItem("token")}`
+        }
+      });
+      if (!response.ok) throw new Error("Erreur lors de la récupération des transactions");
+      const dataReponse = await response.json();
+      localStorage.setItem("id",dataReponse.id);
+     
       if (data.role === "client") router.push("/dashboarclient");
       else if (data.role === "merchant") router.push("/merchant"); 
     } catch (err: any) {

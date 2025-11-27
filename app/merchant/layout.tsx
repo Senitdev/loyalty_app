@@ -16,7 +16,8 @@ export default function MerchantLayout({ children }: { children: React.ReactNode
           menuOpen ? "block" : "hidden"
         } md:block w-full md:w-64 bg-zinc-900 border-r border-zinc-800 p-4 fixed md:static top-0 left-0 h-full z-20`}
       >
-        <h2 className="text-xl font-bold mb-6">Loyalty Program</h2>
+        <h2 className="text-xl font-bold mb-6">Loyalty Program </h2>
+        <h6 className="text-sm mb-4 text-blue-700">{localStorage.getItem("email")}</h6>
         <nav className="space-y-2">
           <Link href="/merchant" className="block py-2 px-3 rounded-lg hover:bg-zinc-800" onClick={()=>setMenuOpen(false)}>
             Dashboard
@@ -29,6 +30,9 @@ export default function MerchantLayout({ children }: { children: React.ReactNode
           </Link>
           <Link href="/merchant/rewards" className="block py-2 px-3 rounded-lg hover:bg-zinc-800" onClick={()=>setMenuOpen(false)}>
             Rewards
+          </Link>
+           <Link href="/deconnexion" className="block py-2 px-3 rounded-lg text-red-400 hover:bg-red-800" onClick={()=>setMenuOpen(false)}>
+              Deconnexion
           </Link>
         </nav>
       </aside>

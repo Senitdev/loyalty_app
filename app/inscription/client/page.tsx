@@ -39,7 +39,7 @@ export default function SignupPage() {
       return
     }
     try {
-      const res = await fetch(`${API_BASE_URL}/api/v1/inscription/client`, {
+      const res = await fetch(`${API_BASE_URL}/inscription/client`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

@@ -1,5 +1,5 @@
 'use client';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useTransaction from "@/app/hooks/useTransaction";
 import useAuthGuard from "../../hooks/useAuthGuard";
 export default function TransactionsPage() {
@@ -9,8 +9,8 @@ const formattedDate = today.toISOString().split("T")[0];
   const [startDate, setStartDate] = useState(formattedDate);
   const [endDate, setEndDate] = useState(formattedDate);
   const [loading, setLoading] = useState(false);
- const{transaction,getTransaction,error}=useTransaction()
-  const marchantId=3
+  const{transaction,getTransaction,error}=useTransaction()
+  const merchantId=Number(localStorage.getItem("id"))
   const handleSearch = async () => {
     if (!startDate || !endDate) {
       setError("Veuillez saisir les deux dates.");
@@ -18,7 +18,7 @@ const formattedDate = today.toISOString().split("T")[0];
     }
   //  setError("");
     setLoading(true);
-    getTransaction(marchantId,startDate,endDate)
+    getTransaction(merchantId,startDate,endDate)
   };
   const authorized = useAuthGuard("merchant");
   if (!authorized) return null;

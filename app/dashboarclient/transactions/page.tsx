@@ -11,7 +11,7 @@ export default function ClientTransaction(){
       const [endDate, setEndDate] = useState(formattedDate);
       const [loading, setLoading] = useState(false);
       const [error, setError] = useState("");
-      const cliendID=3; // ID client fixe pour l'exemple
+      const cliendID=Number(localStorage.getItem("id")); // ID client fixe pour l'exemple
       const handleSearch = async () => {
     if (!startDate || !endDate) {
       setError("Veuillez saisir les deux dates.");

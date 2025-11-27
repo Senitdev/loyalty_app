@@ -20,7 +20,7 @@ export default function useGetAllMerchant(clientId?: number) {
       setLoading(true);
       setError(null);
 
-      const id = clientId ?? 3; // Valeur par défaut si non fournie
+      const id = Number(localStorage.getItem("id")) // Valeur par défaut si non fournie
       const response = await fetch(`${API_BASE_URL}/loyaltycard/user/merchant/${id}`, {
         method: "GET",
         headers: {

@@ -6,14 +6,16 @@ import Link from "next/link";
 import  API_BASE_URL from "../../url_api/api";
 import useAuthGuard from "@/app/hooks/useAuthGuard";
 export default function NewRewardPage() {
+
   const router = useRouter();
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     points_required:0,
-    merchant_id:1,
+    merchant_id:Number(localStorage.getItem("id")),
     isactive: true,
   });
+
     const authorized = useAuthGuard("merchant");
   if (!authorized) return null;
 const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -36,7 +38,6 @@ const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElemen
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     try {
       const res = await fetch(`${API_BASE_URL}/reward`, {
         method: "POST",

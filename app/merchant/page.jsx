@@ -9,19 +9,19 @@ import useTransaction from "@/app/hooks/useTransaction";
 import useGetClient from "../hooks/useGetClient";
 import API_BASE_URL from "../url_api/api";
 import useAuthGuard from "../hooks/useAuthGuard";
+
 export default function MerchantDashboard() {
- 
+  const merchantId=Number(localStorage.getItem("id"))
   const [menuOpen, setMenuOpen] = useState(false);
   const[soldePoint,setSoldePoins]=useState(0)
   const[query,setQuery]=useState("")
    const { client, idClient, loading, error, searchClient } = useSearchClient();
    const{clients,HandleGetClientByMerchant}=useGetClient()
-    const MerchantId=3
    const{transaction,getTransaction}=useTransaction()
   useEffect(()=>{
     const LoadSolde=async()=>{
       try{
-      const res=await fetch(`${API_BASE_URL}/loyaltycard/merchant/solde/${MerchantId}`,{
+      const res=await fetch(`${API_BASE_URL}/loyaltycard/merchant/solde/${merchantId}`,{
         method:"GET",
            headers: { 
              "Content-Type": "application/json",
@@ -37,10 +37,11 @@ export default function MerchantDashboard() {
      
     }
     //Historique transaction
-     getTransaction(MerchantId,"","")
+   
+     getTransaction(merchantId,"","")
     //Appel de la fonction load
     //liste des 5 derniers clients
-    HandleGetClientByMerchant(MerchantId)
+    HandleGetClientByMerchant(merchantId)
     LoadSolde()
   },[])
    const authorized = useAuthGuard("merchant");

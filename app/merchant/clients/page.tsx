@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import { Search, PlusCircle, MinusCircle } from "lucide-react";
 import API_BASE_URL from "@/app/url_api/api";
 import useAuthGuard from "@/app/hooks/useAuthGuard";
+
 export default function ManageClientPoints() {
+  
 
   const [query, setQuery] = useState("");
   const [client, setClient] = useState({
@@ -15,17 +17,19 @@ export default function ManageClientPoints() {
     points: "",
     mobile: "",
   });
+
   const [points, setPoints] = useState<number>(0);
   const [message, setMessage] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [idClient, setIdClient] = useState<number>(0);
   const [soldePoints, setSoldePoints] = useState<number>(0);
-  const authorized = useAuthGuard("merchant");
-  if (!authorized) return null;
-  const [formData, setFormData] = useState({
-    merchant_id: 3, // ton marchand actuel
-    clients_id: 0,
-  });
+
+  const [formData, setFormData] = useState<{ merchant_id: number; clients_id: number }>(
+    {
+      merchant_id: 0,
+      clients_id: 0,
+    }
+  );
 
   // 🔍 Recherche client par email ou téléphone
   const handleSearch = async () => {
@@ -33,7 +37,6 @@ export default function ManageClientPoints() {
     setLoading(true);
     setMessage("");
 
-    // 🧹 Réinitialiser le client
     setClient({
       id: "",
       email: "",
@@ -44,18 +47,19 @@ export default function ManageClientPoints() {
     });
 
     try {
-      const res = await fetch(`${API_BASE_URL}/clients/search?query=${query}`,{
+      const res = await fetch(`${API_BASE_URL}/clients/search?query=${query}`, {
         method: "GET",
-        headers: { 
+        headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
+
       if (!res.ok) throw new Error("Client introuvable");
 
       const data = await res.json();
       setClient(data);
-      setIdClient(data.id); // ➕ met à jour le client trouvé
+      setIdClient(data.id);
     } catch (err: any) {
       setMessage(err.message);
     } finally {
@@ -63,55 +67,65 @@ export default function ManageClientPoints() {
     }
   };
 
-  // 🧾 Vérifie le solde du client dès que l’ID change
+  // ✅ Mise à jour automatique du marchand + client
   useEffect(() => {
-    if (idClient > 0) {
-      // 🔁 Met à jour formData proprement
-      const updated = { ...formData, clients_id: idClient };
-      setFormData(updated);
+    const merchantId = localStorage.getItem("id");
 
-      // 🔍 Vérifie le solde
+    if (idClient > 0 && merchantId) {
+      const updated = {
+        clients_id: idClient,
+        merchant_id: Number(merchantId),
+      };
+
+      setFormData(updated);
       HandleCheckSolde(updated);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idClient]);
-
-  // 🔍 Fonction pour récupérer le solde
-  const HandleCheckSolde = async (body: { merchant_id: number; clients_id: number }) => {
+const authorized = useAuthGuard("merchant");
+  if (!authorized) return null;
+  // 🔍 Vérifier le solde du client
+  const HandleCheckSolde = async (body: {
+    merchant_id: number;
+    clients_id: number;
+  }) => {
     setPoints(0);
+
     try {
       const request = await fetch(`${API_BASE_URL}/loyaltycard/solde`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" ,
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify(body),
       });
 
       const data = await request.json();
-     // if (!request.ok) throw new Error("Solde introuvable");
-
-      setSoldePoints(data.points);
-      console.log("💰 Solde points :", data.points);
+      setSoldePoints(data.points ?? 0);
     } catch (err) {
       console.error("Erreur solde :", err);
       setSoldePoints(0);
     }
   };
 
-  // ➕ Octroyer des points
+  // ➕ Ajouter des points
   const handleAddPoints = async () => {
     if (!idClient || points <= 0) return;
+
     try {
       const res = await fetch(`${API_BASE_URL}/loyaltycard/add/${points}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
         body: JSON.stringify(formData),
       });
+
       if (!res.ok) throw new Error("Erreur lors de l’ajout des points");
 
       setMessage("✅ Points ajoutés avec succès !");
-      HandleCheckSolde(formData); // 🔄 actualiser solde
+      HandleCheckSolde(formData);
       setPoints(0);
     } catch (err: any) {
       setMessage("❌ " + err.message);
@@ -121,21 +135,26 @@ export default function ManageClientPoints() {
   // ➖ Retirer des points
   const handleRemovePoints = async () => {
     if (!idClient || points <= 0) return;
-    if (points>soldePoints){
-      setMessage("❌ Solde points insuffisant")
+
+    if (points > soldePoints) {
+      setMessage("❌ Solde points insuffisant");
       return;
-    } 
+    }
 
     try {
       const res = await fetch(`${API_BASE_URL}/loyaltycard/retrait/${points}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
         body: JSON.stringify(formData),
       });
+
       if (!res.ok) throw new Error("Erreur lors du retrait des points");
 
       setMessage("✅ Points retirés avec succès !");
-      HandleCheckSolde(formData); // 🔄 actualiser solde
+      HandleCheckSolde(formData);
       setPoints(0);
     } catch (err: any) {
       setMessage("❌ " + err.message);
@@ -187,10 +206,11 @@ export default function ManageClientPoints() {
 
           <div className="flex justify-between items-center bg-zinc-800 rounded-lg p-3 mt-3">
             <span className="text-gray-300">Solde actuel :</span>
-            <span className="text-xl font-bold text-indigo-400">{soldePoints ?? 0} pts</span>
+            <span className="text-xl font-bold text-indigo-400">
+              {soldePoints} pts
+            </span>
           </div>
 
-          {/* ➕➖ Modification points */}
           <div className="flex items-center gap-2 mt-4">
             <input
               type="number"

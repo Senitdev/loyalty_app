@@ -26,6 +26,9 @@ export default function MerchantLayout({ children }: { children: React.ReactNode
              <Link href="/dashboarclient/rewards" className="block py-2 px-3 rounded-lg hover:bg-zinc-800" onClick={()=>setMenuOpen(false)}>
             Rewards merchant
           </Link>
+          <Link href="/deconnexion" className="block py-2 px-3 rounded-lg text-red-400 hover:bg-red-800" onClick={()=>setMenuOpen(false)}>
+              Deconnexion
+          </Link>
         </nav>
       </aside>
 
