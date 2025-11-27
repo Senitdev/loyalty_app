@@ -8,10 +8,11 @@ export default function Client() {
 
   const { soldePointsClient, HandleGetSoldeClient } = useSoldeClient()
   const { transactionClient, getTransactionClient } = useGetTransactionClient()
-  const clientId = Number(localStorage.getItem("id"))
+
   const startDate = "20250101"
   const endDate = "20250101"
   useEffect(() => {
+      const clientId = Number(localStorage.getItem("id"))
     //Obtenir le solde point des clients pour toutes les magazins dont il a une compte
     HandleGetSoldeClient()
     getTransactionClient(clientId, startDate, endDate)

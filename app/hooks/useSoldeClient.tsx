@@ -2,8 +2,9 @@ import { useState } from "react";
 import API_BASE_URL from "../url_api/api";
 export default  function useSoldeClient(){
 const[soldePointsClient,setSoldePointsClient]=useState<number>(0);
-const client_id=Number(localStorage.getItem("id"))
+
 const HandleGetSoldeClient=async()=>{
+    const client_id=Number(localStorage.getItem("id"))
     try {
         const response = await fetch(`${API_BASE_URL}/loyaltycard/user/solde/${client_id}`, {
             method: 'GET',
