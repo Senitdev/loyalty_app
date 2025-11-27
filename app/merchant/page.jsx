@@ -11,7 +11,7 @@ import API_BASE_URL from "../url_api/api";
 import useAuthGuard from "../hooks/useAuthGuard";
 
 export default function MerchantDashboard() {
-  const merchantId=Number(localStorage.getItem("id"))
+  
   const [menuOpen, setMenuOpen] = useState(false);
   const[soldePoint,setSoldePoins]=useState(0)
   const[query,setQuery]=useState("")
@@ -19,6 +19,7 @@ export default function MerchantDashboard() {
    const{clients,HandleGetClientByMerchant}=useGetClient()
    const{transaction,getTransaction}=useTransaction()
   useEffect(()=>{
+    const merchantId=Number(localStorage.getItem("id"))
     const LoadSolde=async()=>{
       try{
       const res=await fetch(`${API_BASE_URL}/loyaltycard/merchant/solde/${merchantId}`,{
